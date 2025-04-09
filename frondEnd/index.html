@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target</title>
+    <link rel="stylesheet" href="./CSS/loginPanel.css">
+    <link rel="stylesheet" href="./CSS/all-css.css">
+    <link rel="stylesheet" href="./CSS/admin.css">
+</head>
+<body>
+    <div class="super-container">
+        <div class="login-container">
+            <div class="img-bg">
+                <img src="" alt="BG IMAGE">
+            </div>
+                <div class="content">
+    
+                </div>
+            <div class="white-bg">
+                white Image
+            </div>
+        </div>
+        
+
+        <div class="user-role-panel">
+            <div class="first-col-content">
+                <div class="user-info">
+                    Logged in As
+                </div>
+
+
+                <card class="sidebar">
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Product</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Supplier</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Users</span>
+                    </div>
+
+
+
+
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Transaction</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Report</span>
+                    </div>
+                    <div class="sidebar-cont" onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose" >Sales</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Normalized</span>
+                    </div>
+                </card>
+    
+            </div>
+            
+
+
+
+
+            <div class="second-col-content">
+                <div class="crud-option">
+                    <span onclick="crud(this)">Add</span>
+                    <span onclick="curd(this)">View</span>
+                    <span onclick="curd(this)">Update</span>
+                    <span onclick="curd(this)">Delete</span>
+                </div>
+                <div class="role-base-content">
+                    <!-- <h1>Welcome</h1> -->
+                    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+    <script src="./Scripts/AddToDb.js"></script>
+    <script src="./Scripts/CrudFunction.js"></script>
+    <script src="./Scripts/SideBarScripts.js"></script>
+    <script src="./Scripts/Initialiaze.js"></script>
+    <script src="./Panel/AdminPanel.js"></script>
+    <script src="./Classes/User.js"></script>
+    <script src="./Auth/AccountDesignation.js"></script>
+    <script src="./Auth/VerifyAccount.js"></script>
+    <script src="./Panel/LoginPanel.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

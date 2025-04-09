@@ -1,0 +1,21 @@
+DESCRIBE Users;
+DESCRIBE Roles;
+DESCRIBE Products;
+DESCRIBE Suppliers;
+DESCRIBE SupplierProducts;
+DESCRIBE Stock;
+DESCRIBE Sales;
+INSERT INTO `stock`(`ProductID`, `SupplierID`, `QuantityAdded`, `DateAdded`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]')
+
+can you make dummby values for this here are other information
+
+Products
++-----------+----------------+-------------+-------+
+| ProductID | Name           | Category    | Price |
++-----------+----------------+-------------+-------+
+|         1 | Chippy         | Snack Chips | 12.00 |
+|         2 | Nova           | Snack Chips | 14.00 |
+|         3 | Piattos        | Snack Chips | 15.00 |
+|         4 | Roller Coaster | Snack Chips | 13.00 |
+|         5 | Vcut           | Snack Chips | 12.00 |
++-----------+----------------+-------------+-------+
