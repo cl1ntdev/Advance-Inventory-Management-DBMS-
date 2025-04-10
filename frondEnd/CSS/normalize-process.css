@@ -1,0 +1,19 @@
+.normalize-process {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%; 
+    overflow-y: auto;
+    padding: 20px; 
+    box-sizing: border-box; 
+    table{
+        width: 100%;
+        margin: 10px;
+    }
+}
+
+._1nf,._2nf,._3nf{
+    width: 100%;
+}
+

@@ -60,10 +60,25 @@ const addProduct = async () => {
         })
     });
 
-    const result = await response.json();
-    console.log(result);
+    // const result = await response.json();
+    addRawDataToDb(pName,pCat,pPrice,suppliers)
+
+    // console.log(result);
     
 };
+
+const addRawDataToDb = async(productname,productcategory,productprice,suppliers) =>{
+    console.log(productname,productcategory,productprice)
+    console.log(suppliers)
+    
+    await fetch('http://127.0.0.1:8080/add-raw-data',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({productname,productcategory,productprice,suppliers})
+    })
+}
 
 
 const addSupplierDb = async() => {
@@ -104,3 +119,28 @@ const addSupplierDb = async() => {
     })
 }
 
+
+
+const addUserToDb = async() => {
+    var Username = document.querySelector('#username').value.trim()
+    var Password = document.querySelector('#password-get-user').value.trim()
+    var _ConfirmPass = document.querySelector('#confirm-password').value.trim()
+    var Role = document.querySelector('#user-role-input').value.trim()
+    console.log(Password,_ConfirmPass)
+    const existingUser = await getExistingUser(Username)
+    if(existingUser.length>0){
+        alert('on addtodb, ther is existing user')
+        return 
+    }else if(Password != _ConfirmPass){
+        alert('on addtodb, password dont match')
+        return
+    }
+
+    await fetch('http://127.0.0.1:8080/add-user',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({Username,Password,Role})
+    })
+}

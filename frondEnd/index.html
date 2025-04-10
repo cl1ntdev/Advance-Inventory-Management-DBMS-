@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="./CSS/loginPanel.css">
     <link rel="stylesheet" href="./CSS/all-css.css">
     <link rel="stylesheet" href="./CSS/admin.css">
+    <link rel="stylesheet" href="./CSS/product.css">
+    <link rel="stylesheet" href="./CSS/normalize-process.css">
 </head>
 <body>
     <div class="super-container">
@@ -37,6 +39,10 @@
                     </div>
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
+                        <span class="sidebar-purpose">Product Supplier</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
                         <span class="sidebar-purpose">Supplier</span>
                     </div>
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
@@ -44,16 +50,18 @@
                         <span class="sidebar-purpose">Users</span>
                     </div>
 
-
-
-
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
                         <span class="sidebar-purpose">Report</span>
                     </div>
+
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
                         <span class="sidebar-purpose">Normalized</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Normalize Process</span>
                     </div>
                 </card>
     
@@ -65,14 +73,15 @@
 
             <div class="second-col-content">
                 <div class="crud-option">
-                    <span onclick="crud(this)">Add</span>
-                    <span onclick="crud(this)">View</span>
-                    <span onclick="crud(this)">Update</span>
-                    <span onclick="crud(this)">Delete</span>
+                    <span class="crud-value add-crud" onclick="crud(this)">Add</span>
+                    <span class="crud-value view-crud" onclick="crud(this)">View</span>
+                    <span class="crud-value update-crud" onclick="crud(this)">Update</span>
+                    <span class="crud-value delete-crud" onclick="crud(this)">Delete</span>
                 </div>
                 <div class="role-base-content">
                     <!-- <h1>Welcome</h1> -->
-                  
+                    
+                    
                 </div>
             </div>
           
@@ -81,7 +90,11 @@
     <script src="./Scripts/_GlobalScript.js"></script>
 
 
-    
+    <script src="./Scripts/NormaliziationProcess.js"></script>
+    <script src="./Scripts/Normalized.js"></script>
+    <script src="./Scripts/Reports.js"></script>
+    <script src="./Scripts/ProductSupplierCRUD.js"></script>
+    <script src="./Scripts/UserCRUD.js"></script>
     <script src="./Scripts/UpdateToDb.js"></script>
     <script src="./Scripts/SupplierCRUD.js"></script>
     <script src="./Scripts/DeleteInDb.js"></script>
@@ -94,6 +107,7 @@
     <script src="./Auth/AccountDesignation.js"></script>
     <script src="./Auth/VerifyAccount.js"></script>
     <script src="./Panel/LoginPanel.js"></script>
+    <script src="./CSS/sidebarfunction.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

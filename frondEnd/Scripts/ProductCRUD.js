@@ -1,10 +1,21 @@
 const crud = (element) => {
     console.log('tes')
     currentCrud = element.innerHTML.trim();
+    console.log(currentSideBar)
     if(currentSideBar == "Product"){
         fillPane()
     }else if(currentSideBar == "Supplier"){
         fillPaneSupplier();
+    }else if (currentSideBar == "Users"){
+        fillPaneUser()
+    }else if(currentSideBar == "Product Supplier"){
+        fillPaneProductSupplier();
+    }else if(currentSideBar == "Report"){
+        fillPaneReports()
+    }else if(currentSideBar == "Normalized"){
+        AllNormalizedData();
+    }else if(currentSideBar == "Normalize Process"){
+        NormalizeProcessPane();
     }
 }
 // Add, View, Update, Delete
@@ -20,19 +31,19 @@ const fillPane = async() =>{
         
         if(currentCrud == "Add" && currentSideBar == "Product"){
             role_base_cont.innerHTML = `
-            <h1>Add product</h1>
-                    <div action="">
+                    <div class="product-main-container">
+                        <h1>Add product</h1>
                        <div class="product-add-details">
                            <label for="add-product-name">Product Name</label>
-                           <input type="text" name="add-product-name" id="product-name">
+                           <input type="text" name="add-product-name" placeholder="Chips"  id="product-name">
                        </div>
                        <div class="product-add-details">
                            <label for="add-product-category">Product Category</label>
-                           <input type="text" name="add-product-category" id="product-category">
+                           <input type="text" name="add-product-category" placeholder="Food" id="product-category">
                        </div>
                        <div class="product-add-details">
                            <label for="add-product-price">Product Price</label>
-                           <input type="text" name="add-product-price" id="product-price">
+                           <input type="text" name="add-product-price" placeholder="20" id="product-price">
                        </div>
                         <div class="product-add-details-suppliers">
                            <h3>Suppliers</h3>
@@ -46,9 +57,11 @@ const fillPane = async() =>{
                                
                             </div>
                             
+                            <div class="button-add-options">
+                                <span class="addsupplier" onclick="addSupplier('sel')">+Add More Supplier </span>
+                                <span class="addsupplier" onclick="addSupplier('custom')">+Add Custom Supplier </span>
+                            </div>
                             
-                            <span class="addsupplier" onclick="addSupplier('sel')">+Add More Supplier </span>
-                            <span class="addsupplier" onclick="addSupplier('custom')">+Add Custom Supplier </span>
 
                        </div>
                        
@@ -60,6 +73,7 @@ const fillPane = async() =>{
             var products = await getProducts();
             console.log(products)
             role_base_cont.innerHTML = `
+                <h3>View Products</h3>
                 <table class="product-show-table">
                         <th>
                             <tr>

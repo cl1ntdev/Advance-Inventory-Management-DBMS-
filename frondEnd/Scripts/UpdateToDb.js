@@ -28,3 +28,18 @@ const updateSupplier = async() =>{
     })
 }
 
+const updateUser = async() =>{
+    var UserID = parseInt(document.querySelector('.user-id-update').value)
+    var Username = document.querySelector('.user-name-update').value
+    var UserRole = document.querySelector('.user-role-update').value
+
+    console.log(UserID,Username,UserRole)
+    const updateDb = await fetch('http://127.0.0.1:8080/update-user',{
+        method: 'POST',
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({UserID,Username,UserRole})
+    })
+}
+

@@ -35,6 +35,8 @@ app.get('/users',async(req,res)=>{
     }
 })
 
+
+// get suppliers
 app.get('/suppliers',async (req,res)=>{
     const query = "select * from suppliers";
     try{
@@ -48,7 +50,7 @@ app.get('/suppliers',async (req,res)=>{
         console.log(e)
     }
 })
-
+// get products
 app.get('/products',async (req,res)=>{
     const query = "select * from products";
     try{
@@ -250,9 +252,356 @@ app.post('/delete-supplier', async(req,res)=>{
 })
 
 
+// ABOUT USER
+ 
+
+//get existing user
+app.post('/existing-user',async(req,res)=>{
+    console.log("reqbody is:",req.body)
+    const {Username} = req.body
+    var query = 'select Username from users where Username = ?';
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            const [result] = await con.execute(query,[Username]);
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+//add user
+app.post('/add-user',async(req,res)=>{
+    console.log("reqbody is:",req.body)
+    const {Username,Password,Role} = req.body
+    var RoleID = (Role == "Admin" ? 1 : Role == "Salesperson" ? 2 : 3)
+    
+    var query = 'insert into users(Username,Password,RoleID) values (?,?,?)';
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            const [result] = await con.execute(query,[Username,Password,RoleID]);
+            con.release();
+            res.json(result)
+            console.log('successfully added user to db')
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+
+// get roles type shi
+app.get('/roles',async(req,res)=>{
+    const query = "select * from roles";
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            var [result] = await con.execute(query)
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+
+// update user
+app.post('/update-user',async(req,res)=>{
+    console.log("reqbody is:",req.body)
+    const {UserID,Username,UserRole} = req.body
+    var RoleID = (UserRole == "Admin" ? 1 : UserRole == "Salesperson" ? 2 : 3)
+    const query = "UPDATE users SET Username = ?, RoleID = ? where UserID = ?";
+
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            const [result] = await con.execute(query,[Username,RoleID,UserID]);
+            con.release();
+            res.json(result)
+            console.log('successfully updated user to db')
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+// delete user
+app.post('/delete-user', async(req,res)=>{
+    console.log(req.body)
+    const {id} = req.body;
+    // const query2 = "delete from supplier where SupplierID = ?"
+    const query1 = "delete from users where UserID = ?"
+    try{
+        const con = await pool.getConnection();
+        await con.execute(query1,[id])
+        con.release()
+        console.log('deleted successfully user')
+    }catch(e){
+        console.log(e)
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // SUUPLLIER PRODUCT but ids
+// app.get('/supplier-product',async(req,res)=>{
+//     const query = "select * from suppliers join on products where supplierproducts.SupplierID = suppliers.SupplierID";
+//         try{
+//             var con = await pool.getConnection();
+//             if(con!=null){
+//                 var [result] = await con.execute(query)
+//                 con.release();
+//                 res.json(result)
+//             }
+//         }catch(e){
+//             console.log(e)
+//         }
+// })
+
+// get supplier product but not the id, the top is the ids
+app.get('/supplier-product', async (req, res) => {
+    const query = `
+        SELECT 
+            sp.SupplierID,
+            s.Name AS SupplierName,
+            sp.ProductID,
+            p.Name AS ProductName
+        FROM 
+            SupplierProducts sp
+        JOIN 
+            Suppliers s ON sp.SupplierID = s.SupplierID
+        JOIN 
+            Products p ON sp.ProductID = p.ProductID
+    `;
+
+    try {
+        const con = await pool.getConnection();
+        const [result] = await con.execute(query);
+        con.release();
+        res.json(result);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: "Failed to fetch supplier-product relations" });
+    }
+});
+
+
+// Sales PRODUCT but ids
+app.get('/sales', async (req, res) => {
+    const query = `
+        SELECT 
+            sales.SaleID,
+            sales.TotalAmount,
+            sales.QuantitySold,
+            sales.SaleDate,
+            products.Name AS ProductName,
+            products.Price,
+            suppliers.Name AS SupplierName
+        FROM 
+            sales
+        JOIN 
+            products ON sales.ProductID = products.ProductID
+        JOIN 
+            supplierproducts ON products.ProductID = supplierproducts.ProductID
+        JOIN 
+            suppliers ON supplierproducts.SupplierID = suppliers.SupplierID
+    `;
+
+    try {
+        const con = await pool.getConnection();
+        const [result] = await con.execute(query);
+        con.release();
+        res.json(result);
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: "Failed to fetch sales data" });
+    }
+});
+
+// get sales type shi
+app.get('/all-sales',async(req,res)=>{
+    const query = "select * from sales";
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            var [result] = await con.execute(query)
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+// get supplierproduct shi
+app.get('/all-supplierproducts',async(req,res)=>{
+    const query = "select * from supplierproducts";
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            var [result] = await con.execute(query)
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+// get stokcs type shi
+app.get('/all-stocks',async(req,res)=>{
+    const query = "select * from stock";
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            var [result] = await con.execute(query)
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+app.post('/add-raw-data', async (req, res) => {
+    console.log(req.body);
+
+    const { productname, productcategory, productprice, suppliers } = req.body;
+
+    try {
+        var con = await pool.getConnection();
+
+        // Prepare arrays to hold the supplier data
+        let supplierNames = [];
+        let supplierStocks = [];
+        let supplierContactInfo = [];
+
+        for (let supplier of suppliers) {
+            let { name, stock, contactInfo } = supplier;
+
+            // If no contact info is provided, get it from the database
+            if (!contactInfo) {
+                const getContactInfoQuery = `
+                    SELECT contactinfo FROM suppliers WHERE name = ?
+                `;
+                const [result] = await con.query(getContactInfoQuery, [name]);
+
+                if (result.length > 0) {
+                    contactInfo = result[0].contactinfo;
+                } else {
+                    contactInfo = null;
+                }
+            }
+
+            // Push the supplier data into arrays
+            supplierNames.push(name);
+            supplierStocks.push(stock);
+            supplierContactInfo.push(contactInfo);
+        }
+
+        // Join the arrays into strings (comma-separated)
+        const supplierNamesStr = supplierNames.join(', ');
+        const supplierStocksStr = supplierStocks.join(', ');
+        const supplierContactInfoStr = supplierContactInfo.join(', ');
+
+        // Insert the data into the rawdata table
+        const insertRawDataQuery = `
+            INSERT INTO rawdata (productname, category, price, supplier, stocks, contactinfo)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        
+        await con.query(insertRawDataQuery, [
+            productname, 
+            productcategory, 
+            productprice, 
+            supplierNamesStr, 
+            supplierStocksStr, 
+            supplierContactInfoStr
+        ]);
+
+        res.send('Data inserted successfully!');
+    } catch (e) {
+        console.log(e);
+        res.status(500).send('Error inserting data');
+    } finally {
+        if (con) con.release();
+    }
+});
+
+
+// get rawdata shi
+app.get('/rawdata',async(req,res)=>{
+    const query = "select * from rawdata";
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            var [result] = await con.execute(query)
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(port,()=>{
     console.log('listening on port',port)
 })
+
+
+
+// get roles 
+
+
+
+
+
+
+
+
+
 
 
 

@@ -20,3 +20,15 @@ const deleteSupplier = async() =>{
         body: JSON.stringify({id:parseInt(id)})
     })
 }
+
+
+const deleteUser = async() =>{
+    var id = document.querySelector('.user-id-delete').value
+    const deleteProd = await fetch('http://127.0.0.1:8080/delete-user',{
+        method: 'POST',
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({id:parseInt(id)})
+    })
+}

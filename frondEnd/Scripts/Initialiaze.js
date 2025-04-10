@@ -8,9 +8,13 @@ const Initialize = (user) =>{
     switch(userRole){
         case 1:
             sideBar.innerHTML = `
-             <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+               <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
                         <span class="sidebar-purpose">Product</span>
+                    </div>
+                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
+                        <img src="" alt="icon">
+                        <span class="sidebar-purpose">Product Supplier</span>
                     </div>
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
@@ -21,21 +25,11 @@ const Initialize = (user) =>{
                         <span class="sidebar-purpose">Users</span>
                     </div>
 
-
-
-
-                    <div class="sidebar-cont"  onclick="sideBarEvent(this)">
-                        <img src="" alt="icon">
-                        <span class="sidebar-purpose">Transaction</span>
-                    </div>
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
                         <span class="sidebar-purpose">Report</span>
                     </div>
-                    <div class="sidebar-cont" onclick="sideBarEvent(this)">
-                        <img src="" alt="icon">
-                        <span class="sidebar-purpose" >Sales</span>
-                    </div>
+
                     <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="" alt="icon">
                         <span class="sidebar-purpose">Normalized</span>
