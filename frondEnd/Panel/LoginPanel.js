@@ -29,7 +29,7 @@ var login = () =>{
     var username = document.querySelector('#email').value.trim()
     var password = document.querySelector('#password').value.trim()
     var role = document.querySelector('#role').value.trim()
-    
+    console.log(username)
     var baseRole = (role == "Admin" ? 1 : role == "Salesperson" ? 2 : 3)
     const userInput = {
         Username: username,

@@ -122,6 +122,12 @@ const addSupplier = (value) => {
     }
 }
 
+const logoutAccount = () =>{
+    console.log('logout')
+    // loginContainer.style.display = 'block';
+    // userRolePanel.style.display = 'none'
+    window.location.reload()
+}
 
 const removeElement = (element) => {
     element.parentElement.remove();

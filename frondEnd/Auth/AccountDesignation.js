@@ -6,8 +6,11 @@ const AccountAssign = (account) => {
     user.status = "logined";
     userContext = user // set the current login user to check type shi
     loginContainer.style.display = 'none';
+    
     document.querySelector('.user-info').innerHTML = `
-        <h3>Logged in as ${user.Username} - ${baseRole}</h3>
+        <h5>Logged in as User:${user.Username}  Role: ${baseRole}</h5>
+        <h5 class="logout" onclick="logoutAccount()">logout</h5>
     `
     Initialize(user);
 }
+

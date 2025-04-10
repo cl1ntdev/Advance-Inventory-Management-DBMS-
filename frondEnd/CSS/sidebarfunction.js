@@ -1,10 +1,22 @@
-var add = document.querySelector('.add-crud')
-var view = document.querySelector('.view-crud')
-var update = document.querySelector('.update-crud')
-var del = document.querySelector('.delete-crud')
-document.querySelectorAll('.sidebar-cont').forEach(sidebar => {
+
+const addDesignFuncSidebar = () => {
+    var add = document.querySelector('.add-crud')
+    var view = document.querySelector('.view-crud')
+    var update = document.querySelector('.update-crud')
+    var del = document.querySelector('.delete-crud')
+
+    var sidebarsconts = document.querySelectorAll('.sidebar-cont')
+    console.log(sidebarsconts)
     
-    sidebar.addEventListener('click', () => {
+    sidebarsconts.forEach(sidebar => {
+      sidebar.addEventListener('click', () => {
+
+    document.querySelectorAll('.crud-value').forEach(crud => {
+            document.querySelectorAll('.crud-value').forEach(s => s.classList.remove('active'));
+    });
+
+
+        console.log('side')
         add.style.display = 'block';
         update.style.display = 'block';
         del.style.display = 'block';
@@ -37,14 +49,16 @@ document.querySelectorAll('.sidebar-cont').forEach(sidebar => {
                 break;
         }    });
 });
+}
 
-
-document.querySelectorAll('.crud-value').forEach(crud => {
-    crud.addEventListener('click', () => {
-        document.querySelectorAll('.crud-value').forEach(s => s.classList.remove('active'));
-        
-        crud.classList.add('active');
-        
-        console.log('Active sidebar clicked');
+const addAnimationCrud = () =>{
+    document.querySelectorAll('.crud-value').forEach(crud => {
+        crud.addEventListener('click', () => {
+            document.querySelectorAll('.crud-value').forEach(s => s.classList.remove('active'));
+            
+            crud.classList.add('active');
+            
+            console.log('Active sidebar clicked');
+        });
     });
-});
+}

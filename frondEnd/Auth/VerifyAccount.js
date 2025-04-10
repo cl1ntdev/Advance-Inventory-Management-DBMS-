@@ -9,6 +9,7 @@ const VerifyAccount = async(user_input) => {
         body: JSON.stringify(user_input)
     })
     const user = await response.json();
+    console.log(user)
     if(user){
         AccountAssign(user) //account designation.js
     }
