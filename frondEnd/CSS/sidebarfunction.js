@@ -15,15 +15,18 @@ const addDesignFuncSidebar = () => {
             document.querySelectorAll('.crud-value').forEach(s => s.classList.remove('active'));
     });
 
-
+        console.log(userContext)
         console.log('side')
+        if(userContext.RoleID == 1){
         add.style.display = 'block';
         update.style.display = 'block';
         del.style.display = 'block';
         view.style.display = 'block'
+        }
 
         document.querySelectorAll('.sidebar-cont').forEach(s => s.classList.remove('active'));
         sidebar.classList.add('active');
+        if(userContext.RoleID == 1){
         
         var purp = sidebar.querySelector('.sidebar-purpose').innerText.trim();
         switch(purp){
@@ -47,7 +50,7 @@ const addDesignFuncSidebar = () => {
                 update.style.display = 'none';
                 del.style.display = 'none';
                 break;
-        }    });
+        } }   });
 });
 }
 

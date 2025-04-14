@@ -12,3 +12,11 @@ window.onload = ()=>{
 // FUNCTIONS WHAT USER CLICKS
 var currentCrud = "Add"
 var currentSideBar = "Product"
+
+const devModeOn = () =>{
+    loginContainer.style.display = 'none'
+    userRolePanel.style.display = 'flex'
+
+}
+
+// devModeOn()

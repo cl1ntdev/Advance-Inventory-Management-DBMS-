@@ -1,6 +1,6 @@
 var sideBar = document.querySelector('.sidebar')
 var crudOptionPane = document.querySelector('.crud-option')
-
+// 1 admin, 2 salesperson, 3 indventory clerk
 
 const Initialize = (user) =>{
     const userRole = user.RoleID;
@@ -8,6 +8,7 @@ const Initialize = (user) =>{
     console.log('user role',userRole)
     switch(userRole){
         case 1:
+            // for sidebar
             sideBar.innerHTML = `
                <div class="sidebar-cont"  onclick="sideBarEvent(this)">
                         <img src="./Assets/SidebarIcons/product.png" alt="icon">
@@ -40,6 +41,7 @@ const Initialize = (user) =>{
                         <span class="sidebar-purpose">Normalize Process</span>
                     </div>
             `
+            //for cruds
             crudOptionPane.innerHTML = `
                     <span class="crud-value add-crud" onclick="crud(this)">Add</span>
                     <span class="crud-value view-crud" onclick="crud(this)">View</span>
@@ -50,6 +52,18 @@ const Initialize = (user) =>{
             addAnimationCrud()
             break;
         case 2:
+            sideBar.innerHTML = `
+                    <div class="sidebar-cont"  onclick="showSales()">
+                        <img src="./Assets/SalesPersonSidebar/Sales.png" alt="icon">
+                        <span class="sidebar-purpose">Sales</span>
+                   </div>
+                   <div class="sidebar-cont" onclick="showsSellPane()">
+                        <img src="./Assets/SalesPersonSidebar/Sell.png" alt="icon">
+                        <span class="sidebar-purpose">Sell</span>
+                    </div>
+            `
+            addDesignFuncSidebar() //desing css type shi
+
             break;
         case 3:
             break;

@@ -1,3 +1,4 @@
+
 const getSuppliers = async() =>{
     var result = await fetch('http://127.0.0.1:8080/suppliers')
     var suppliers = await result.json();
@@ -72,8 +73,23 @@ const getRawData = async() =>{
     return products
 }
 
+const productInfoToSell = async(productName) =>{
+    console.log(productName)
+    var productInfo = await fetch('http://127.0.0.1:8080/product-info-to-sell',{
+     method: "POST",
+     headers:{
+       "Content-Type":"application/json",
+     },
+     body: JSON.stringify({productName})
+    })
+    var productInfoReturn = await productInfo.json()
+    return productInfoReturn
+ }
+
+ 
 var role_base_cont = document.querySelector('.role-base-content')
 var _global_current_suppliers;
+const formatDate = (dateStr) => new Date(dateStr).toISOString().split('T')[0];
 
 
 
@@ -131,6 +147,10 @@ const logoutAccount = () =>{
 
 const removeElement = (element) => {
     element.parentElement.remove();
+}
+
+const removeElementForProdInp = (element) => {
+    element.parentElement.parentElement.remove();
 }
 
 

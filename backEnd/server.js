@@ -565,6 +565,91 @@ app.get('/rawdata',async(req,res)=>{
     }
 })
 
+app.post('/product-info-to-sell',async(req,res)=>{
+    
+    const {productName} = req.body
+    const query = "select * from products where ProductID = ?";
+    try{
+        var con = await pool.getConnection();
+        if(con!=null){
+            var [result] = await con.execute(query,[productName])
+            console.log(result)
+            con.release();
+            res.json(result)
+        }
+    }catch(e){
+        console.log(e)
+    }
+})
+
+// selllllllllllll
+
+app.post('/sell-product', async (req, res) => {
+    console.log(req.body)
+    const { allProdSaleInfo } = req.body;
+    
+    try {
+        // Create database connection
+        const con = await pool.getConnection();
+        
+        try {
+            // Begin transaction
+            await con.beginTransaction();
+            
+            // Process each product sale
+            for (const sale of allProdSaleInfo) {
+                const { ProductName, Price, Amount, Total, SaleDate } = sale;
+                
+                // Get ProductID by ProductName
+                const [productResult] = await con.query(
+                    'SELECT ProductID FROM Products WHERE Name = ?',
+                    [ProductName]
+                );
+                
+                if (!productResult.length) {
+                    throw new Error(`Product ${ProductName} not found`);
+                }
+                
+                const ProductID = productResult[0].ProductID;
+                
+                // Insert into Sales table
+                await con.query(
+                    `INSERT INTO Sales (ProductID, QuantitySold, SaleDate, TotalAmount)
+                    VALUES (?, ?, ?, ?)`,
+                    [ProductID, Amount, SaleDate, Total]
+                );
+                
+                // Update Stock quantity
+                await con.query(
+                    `UPDATE Stock 
+                    SET QuantityAdded = QuantityAdded - ? 
+                    WHERE ProductID = ?`,
+                    [Amount, ProductID]
+                );
+            }
+            
+            // Commit transaction
+            await con.commit();
+            res.status(200).json({ message: 'Sales recorded successfully' });
+            
+        } catch (error) {
+            // Rollback transaction on error
+            await con.rollback();
+            throw error;
+        } finally {
+            con.release();
+        }
+        
+    } catch (error) {
+        console.error('Error processing sale:', error);
+        res.status(500).json({ 
+            error: 'Failed to process sale',
+            details: error.message 
+        });
+    }
+});
+
+
 
 
 
