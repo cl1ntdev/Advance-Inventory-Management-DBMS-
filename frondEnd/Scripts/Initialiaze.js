@@ -2,6 +2,7 @@ var sideBar = document.querySelector('.sidebar')
 var crudOptionPane = document.querySelector('.crud-option')
 // 1 admin, 2 salesperson, 3 indventory clerk
 
+
 const Initialize = (user) =>{
     const userRole = user.RoleID;
     userRolePanel.style.display = 'flex'

@@ -12,9 +12,9 @@ const fillPaneUser = async() =>{
         
         if(currentCrud == "Add" && currentSideBar == "Users"){
             role_base_cont.innerHTML = `
+            <div class="user-add-main">
             <h1>Add User</h1>
                     <div class="user-add-details-suppliers">
-                        <h3>Suppliers</h3>
                          <div class="user-show-pane">
                            <label for="user">Enter Username</label>
                            <input type="text" id="username">
@@ -29,24 +29,28 @@ const fillPaneUser = async() =>{
                            </select>
                          </div>
                        <button onclick="addUserToDb()">Add</button>
-
+                    </div>
                     </div>`
+                
                 
         }else if( currentCrud == "View" && currentSideBar == "Users"){
             var users = await getUsers();
             role_base_cont.innerHTML = `
+            <div class="user-view-main">
+                <h3>View User</h3>
                 <table class="user-show-table">
-                        <th>
+                        <thead>
                             <tr>
-                                <td>User ID</td>
-                                <td>Username</td>
-                                <td>Role ID</td>
+                                <th>User ID</th>
+                                <th>Username</th>
+                                <th>Role ID</th>
                             </tr>
-                        </th>
+                        </thead>
                         <tbody class="user-table-body">
                            
                         </tbody>
                     </table>
+                    </div>
             `
             var tableBody = document.querySelector('.user-table-body')
             users.forEach(user=>{
@@ -64,7 +68,8 @@ const fillPaneUser = async() =>{
             var roles = await getRoles();
             console.log(roles)
             role_base_cont.innerHTML = `
-                <h3>Update Product</h3>
+                <div class="update-user-main">
+                <h3>Update User</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
                         <thead>
@@ -98,13 +103,13 @@ const fillPaneUser = async() =>{
                     
                     
                     <button onclick="updateUser()">Update</button>
-                </div>
+                </div></div>
             `;
 
         }else if (currentCrud == "Delete" && currentSideBar == "Users"){
             var users = await getUsers();
             role_base_cont.innerHTML = `
-                <h3>Delete Product</h3>
+                <h3>Delete User</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
                         <thead>

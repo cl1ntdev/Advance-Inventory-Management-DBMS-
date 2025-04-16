@@ -5,7 +5,7 @@ const fillPaneProductSupplier = async() =>{
         var supplierProd = await getSupplierProducts()
         console.log(supplierProd)
         role_base_cont.innerHTML = `
-                <h3>Update Product</h3>
+                <h3>Product Supplier</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
                         <thead>

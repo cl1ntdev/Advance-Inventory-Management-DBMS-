@@ -5,13 +5,14 @@ const showLoginPanel = () => {
     <!-- From Uiverse.io by bociKond --> 
             <form class="form user-login-panel">
                 <span class="input-span">
-                <label for="email" class="label">Email</label>
-                <input type="email" name="email" id="email"
-                /></span>
+                    <label for="email" class="label">Email</label>
+                    <input type="email" name="email" id="email"
+                </span>
                 <span class="input-span">
-                <label for="password" class="label">Password</label>
-                <input type="password" name="password" id="password"
-                /></span>
+                    <label for="password" class="label">Password</label>
+                    <input type="password" name="password" id="password"
+                </span>
+                
                  <select name="role" id="role" class="select-input">
                     <option value="Admin">Admin</option>
                     <option value="Salesperson">Salesperson</option>

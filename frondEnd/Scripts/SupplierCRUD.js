@@ -16,7 +16,6 @@ const fillPaneSupplier = async() =>{
                     <div action="">
                       
                         <div class="product-add-details-suppliers">
-                           <h3>Suppliers</h3>
                             <div class="supplier-show-pane">
                                 <div class="supplier-show">
                                    
@@ -29,25 +28,29 @@ const fillPaneSupplier = async() =>{
 
                        </div>
                        
-                       <button onclick="addSupplierDb()">Add</button>
+                       <button class="addsupplier onclick="addSupplierDb()">Add</button>
                     </div>
                     `
                 
         }else if( currentCrud == "View" && currentSideBar == "Supplier"){
             var suppliers = await getSuppliers();
             role_base_cont.innerHTML = `
+            <div class="view-supplier-main">
+                <h3>View Supplier</h3>
+
                 <table class="product-show-table">
-                        <th>
+                        <thead>
                             <tr>
-                                <td>Supplier ID</td>
-                                <td>Name</td>
-                                <td>ContactInfo</td>
+                                <th>Supplier ID</th>
+                                <th>Name</th>
+                                <th>ContactInfo</th>
                             </tr>
-                        </th>
+                        </thead>
                         <tbody class="product-table-body">
                            
                         </tbody>
                     </table>
+                    </div>
             `
             var tableBody = document.querySelector('.product-table-body')
             suppliers.forEach(supplier=>{
@@ -63,7 +66,8 @@ const fillPaneSupplier = async() =>{
         }else if (currentCrud == "Update" && currentSideBar == "Supplier"){
             var suppliers = await getSuppliers();
             role_base_cont.innerHTML = `
-                <h3>Update Product</h3>
+                <div class="update-supplier-pane-main">
+                <h3>Update Supplier</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
                         <thead>
@@ -94,6 +98,7 @@ const fillPaneSupplier = async() =>{
                     
                     <button onclick="updateSupplier()">Update</button>
                 </div>
+                </div>
             `;
 
         }else if (currentCrud == "Delete" && currentSideBar == "Supplier"){
@@ -122,7 +127,7 @@ const fillPaneSupplier = async() =>{
                 </div>
                 <div class="update-inputs">
                      <div class="update-inputs">
-                    <label for="prodname">Enter Product ID</label>
+                    <label for="prodname">Enter Supplier ID</label>
                     <input type="text" name="prodname" class="supplier-id-delete" required>
                     <button onclick="deleteSupplier()">Delete</button>
                 </div>

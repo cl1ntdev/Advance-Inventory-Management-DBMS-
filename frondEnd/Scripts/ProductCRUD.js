@@ -65,7 +65,7 @@ const fillPane = async() =>{
 
                        </div>
                        
-                       <button onclick="addProduct()">Add</button>
+                       <button class="add-product-submit" onclick="addProduct()">Add</button>
                     </div>
                     `
                 
@@ -103,6 +103,7 @@ const fillPane = async() =>{
         }else if (currentCrud == "Update" && currentSideBar == "Product"){
             var products = await getProducts();
             role_base_cont.innerHTML = `
+                <div class="update-product-pane-main">
                 <h3>Update Product</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
@@ -136,6 +137,7 @@ const fillPane = async() =>{
                     <label for="prodprice">Enter Product price</label>
                     <input type="text" name="prodname" class="product-price-update" required>
                     <button onclick="updateProduct()">Update</button>
+                </div>
                 </div>
             `;
 
@@ -180,6 +182,49 @@ const fillPane = async() =>{
 
 
 
+const addSupplier = (value) => {
+    console.log('add');
+    var currentSuppliers = _global_current_suppliers;
+    var suppShowPane = document.querySelector('.supplier-show-pane');
+
+    switch (value) {
+        case "sel":
+            var supplier = `
+                <div class="supplier-show">
+                    <select name="role" class="select-input-supplier">
+                        ${currentSuppliers.map(supplier => `<option value="${supplier.Name}">${supplier.Name}</option>`).join('')}
+                    </select>
+                    <input type="text" class="stock-count" placeholder="stock count">
+                    <button class="remove-element-button" onclick="removeElement(this)">Remove</button>
+                </div>
+            `;
+            suppShowPane.insertAdjacentHTML('beforeend', supplier);
+            break;
+
+        case "custom":
+            var customSupplier = `
+                <div class="supplier-show">
+                    <input type="text" class="custom-supplier-name" placeholder="Custom Supplier Name">
+                    <input type="text" class="stock-count" placeholder="stock count">
+                    <input type="text" class="custom-supplier-name-contact" placeholder="Contact Info">
+                    <button class="remove-element-button" onclick="removeElement(this)">Remove</button>
+                
+                </div>
+            `;
+            suppShowPane.insertAdjacentHTML('beforeend', customSupplier);
+            break;
+         case "custom-sup-only":
+            var customSupplier = `
+                <div class="supplier-show">
+                    <input type="text" class="custom-supplier-name" placeholder="Custom Supplier Name">
+                    <input type="text" class="custom-supplier-name-contact" placeholder="Contact Info">
+                    <button class="remove-element-button" onclick="removeElement(this)">Remove</button>
+                </div>
+            `;
+            suppShowPane.insertAdjacentHTML('beforeend', customSupplier);
+            break;
+    }
+}
 
 
 

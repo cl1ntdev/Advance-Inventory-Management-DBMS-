@@ -19,6 +19,8 @@ const addProduct = async () => {
         
         const stockValue = stockCountInput?.value?.trim();
 
+        // console.log(selectElem, selectElem.value, stockValue)
+        // console.log(customNameInput, customNameInput.value)
         let supplierObj = null;
 
         if (selectElem && selectElem.value && stockValue) {
@@ -71,13 +73,17 @@ const addRawDataToDb = async(productname,productcategory,productprice,suppliers)
     console.log(productname,productcategory,productprice)
     console.log(suppliers)
     
-    await fetch('http://127.0.0.1:8080/add-raw-data',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({productname,productcategory,productprice,suppliers})
-    })
+    try{
+        await fetch('http://127.0.0.1:8080/add-raw-data',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({productname,productcategory,productprice,suppliers})
+        })
+    }catch(e){
+        console.log(e)
+    }
 }
 
 

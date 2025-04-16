@@ -108,51 +108,78 @@ app.post('/verify-account',async(req,res)=>{
 
 // ABOUT PRODUC ==========
 // add product
+
 app.post('/insert-product', async (req, res) => {
     const { pName, pCat, pPrice, suppliers } = req.body;
+    console.log("req body in insert prod", req.body);
 
-    const customSuppliers = suppliers.filter(s => s.contactInfo);
-
-    const qProduct = 'INSERT INTO products(Name, Category, Price) VALUES (?, ?, ?)';
-    const qSuppliers = 'INSERT INTO suppliers(Name, ContactInfo) VALUES ?';
-    const getProductIdQuery = 'SELECT ProductID FROM products WHERE Name = ? ORDER BY ProductID DESC LIMIT 1';
-    const getSupplierIdsQuery = 'SELECT SupplierID, Name FROM suppliers WHERE Name IN (?)';
-    const linkProductSupplier = 'INSERT INTO supplierproducts(SupplierID, ProductID) VALUES ?';
+    const qProduct = 'INSERT INTO Products(Name, Category, Price) VALUES (?, ?, ?)';
+    const qSuppliers = 'INSERT INTO Suppliers(Name, ContactInfo) VALUES (?, ?)';
+    const qStock = 'INSERT INTO Stock(ProductID, SupplierID, QuantityAdded, DateAdded) VALUES (?, ?, ?, ?)';
+    const getProductIdQuery = 'SELECT ProductID FROM Products WHERE Name = ? ORDER BY ProductID DESC LIMIT 1';
+    const getSupplierIdQuery = 'SELECT SupplierID FROM Suppliers WHERE Name = ?';
+    const linkProductSupplier = 'INSERT INTO SupplierProducts(SupplierID, ProductID) VALUES ?';
 
     const con = await pool.getConnection();
 
     try {
+        await con.beginTransaction();
+
         // 1. Insert product
         const [productResult] = await con.execute(qProduct, [pName, pCat, pPrice]);
 
         // 2. Get the inserted ProductID
         const [productRows] = await con.execute(getProductIdQuery, [pName]);
         const productID = productRows[0]?.ProductID;
-
-        // 3. Insert only custom suppliers
-        if (customSuppliers.length > 0) {
-            const supplierValues = customSuppliers.map(s => [s.name, s.contactInfo]);
-            await con.query(qSuppliers, [supplierValues]);
+        if (!productID) {
+            throw new Error('Failed to retrieve ProductID');
         }
 
-        // 4. Get SupplierIDs for custom suppliers
-        const supplierNames = customSuppliers.map(s => s.name);
-        const [supplierRows] = await con.query(getSupplierIdsQuery, [supplierNames]);
+        // 3. Process suppliers and stock
+        const supplierProductValues = [];
+        const currentDate = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD
 
-        // 5. Insert into supplierproducts
-        const supplierProductValues = supplierRows.map(supplier => [supplier.SupplierID, productID]);
+        for (const supplier of suppliers) {
+            const supplierName = supplier.name;
+            let supplierID;
+
+            // Check if supplier already exists
+            const [existingSupplier] = await con.execute(getSupplierIdQuery, [supplierName]);
+            
+            if (existingSupplier.length > 0) {
+                supplierID = existingSupplier[0].SupplierID;
+            } else {
+                const contactInfo = supplier.contactInfo || null;
+                const [supplierResult] = await con.execute(qSuppliers, [supplierName, contactInfo]);
+                supplierID = supplierResult.insertId;
+            }
+
+            // Insert stock if provided
+            if (supplier.stock) {
+                await con.execute(qStock, [productID, supplierID, supplier.stock, currentDate]);
+            }
+
+            // Add to supplierProductValues for linking
+            supplierProductValues.push([supplierID, productID]);
+        }
+
+        // 4. Insert into SupplierProducts
         if (supplierProductValues.length > 0) {
             await con.query(linkProductSupplier, [supplierProductValues]);
         }
 
+        await con.commit();
         con.release();
-        res.json({ message: 'Product and custom suppliers inserted successfully.' });
+        res.json({ message: 'Product, suppliers, and stock inserted successfully.' });
+
     } catch (e) {
+        await con.rollback();
         con.release();
-        console.error(e);
-        res.status(500).json({ error: 'Database insertion failed.' });
+        console.error('Error inserting product:', e);
+        res.status(500).json({ error: 'Database insertion failed.', details: e.message });
     }
 });
+
 
 //delete product
 app.post('/delete-product', async(req,res)=>{
@@ -409,37 +436,131 @@ app.get('/supplier-product', async (req, res) => {
 
 
 // Sales PRODUCT but ids
+
 app.get('/sales', async (req, res) => {
+    const { startDate, endDate } = req.query; // Optional date range filter
+
+    // Build the WHERE clause for date filtering
+    let dateFilter = '';
+    const queryParams = [];
+    if (startDate && endDate) {
+        dateFilter = 'WHERE SaleDate BETWEEN ? AND ?';
+        queryParams.push(startDate, endDate);
+    } else if (startDate) {
+        dateFilter = 'WHERE SaleDate >= ?';
+        queryParams.push(startDate);
+    } else if (endDate) {
+        dateFilter = 'WHERE SaleDate <= ?';
+        queryParams.push(endDate);
+    }
+
     const query = `
+        WITH StockSummary AS (
+            SELECT 
+                ProductID, 
+                SUM(QuantityAdded) AS TotalStockAdded
+            FROM 
+                Stock
+            ${endDate ? 'WHERE DateAdded <= ?' : ''}
+            GROUP BY 
+                ProductID
+        ),
+        SalesSummary AS (
+            SELECT 
+                ProductID,
+                COALESCE(SUM(QuantitySold), 0) AS TotalQuantitySold,
+                COALESCE(SUM(TotalAmount), 0) AS ProductRevenue
+            FROM 
+                Sales
+                ${dateFilter}
+            GROUP BY 
+                ProductID
+        ),
+        ProductSales AS (
+            SELECT 
+                p.ProductID,
+                p.Name AS ProductName,
+                p.Price,
+                GROUP_CONCAT(DISTINCT s.Name ORDER BY s.Name) AS SupplierNames,
+                COALESCE(ss.TotalQuantitySold, 0) AS TotalQuantitySold,
+                COALESCE(ss.ProductRevenue, 0) AS ProductRevenue,
+                COALESCE(st.TotalStockAdded, 0) - COALESCE(ss.TotalQuantitySold, 0) AS CurrentStock
+            FROM 
+                Products p
+            LEFT JOIN 
+                SalesSummary ss ON p.ProductID = ss.ProductID
+            LEFT JOIN 
+                StockSummary st ON p.ProductID = st.ProductID
+            LEFT JOIN 
+                SupplierProducts sp ON p.ProductID = sp.ProductID
+            LEFT JOIN 
+                Suppliers s ON sp.SupplierID = s.SupplierID
+            GROUP BY 
+                p.ProductID, p.Name, p.Price, st.TotalStockAdded, ss.TotalQuantitySold, ss.ProductRevenue
+        ),
+        TotalRevenue AS (
+            SELECT 
+                COALESCE(SUM(TotalAmount), 0) AS TotalRevenue
+            FROM 
+                Sales
+                ${dateFilter}
+        )
         SELECT 
-            sales.SaleID,
-            sales.TotalAmount,
-            sales.QuantitySold,
-            sales.SaleDate,
-            products.Name AS ProductName,
-            products.Price,
-            suppliers.Name AS SupplierName
+            ps.*,
+            tr.TotalRevenue,
+            (SELECT SUM(TotalQuantitySold) FROM ProductSales) AS TotalUnitsSold
         FROM 
-            sales
-        JOIN 
-            products ON sales.ProductID = products.ProductID
-        JOIN 
-            supplierproducts ON products.ProductID = supplierproducts.ProductID
-        JOIN 
-            suppliers ON supplierproducts.SupplierID = suppliers.SupplierID
+            ProductSales ps
+        CROSS JOIN 
+            TotalRevenue tr;
     `;
+
+    // Adjust query parameters for Stock date filter
+    const finalParams = [...queryParams];
+    if (endDate) {
+        finalParams.splice(queryParams.length - 1, 0, endDate); // Add endDate for Stock
+    }
 
     try {
         const con = await pool.getConnection();
-        const [result] = await con.execute(query);
+        
+        // Execute the combined query
+        const [results] = await con.query(query, finalParams);
+        
         con.release();
-        res.json(result);
+
+        // Process results
+        const products = results.map(row => ({
+            ProductID: row.ProductID,
+            ProductName: row.ProductName,
+            SupplierNames: row.SupplierNames || 'No Supplier',
+            Price: parseFloat(row.Price).toFixed(2),
+            CurrentStock: Math.max(row.CurrentStock, 0), // Prevent negative stock
+            TotalQuantitySold: row.TotalQuantitySold,
+            ProductRevenue: parseFloat(row.ProductRevenue).toFixed(2),
+            LowStock: row.CurrentStock < 20 // Flag for low stock
+        }));
+
+        // Extract total revenue and units sold
+        const totalRevenue = results.length > 0 ? parseFloat(results[0].TotalRevenue).toFixed(2) : '0.00';
+        const totalUnitsSold = results.length > 0 ? results[0].TotalUnitsSold : 0;
+
+        res.json({
+            products,
+            totalRevenue,
+            totalUnitsSold,
+            lowStockCount: products.filter(p => p.LowStock).length
+        });
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: "Failed to fetch sales data" });
+        console.error('Error fetching sales data:', e);
+        res.status(500).json({
+            error: 'Failed to fetch sales data',
+            details: e.message,
+            sqlState: e.sqlState,
+            sqlMessage: e.sqlMessage
+        });
     }
 });
-
 // get sales type shi
 app.get('/all-sales',async(req,res)=>{
     const query = "select * from sales";
@@ -565,89 +686,167 @@ app.get('/rawdata',async(req,res)=>{
     }
 })
 
-app.post('/product-info-to-sell',async(req,res)=>{
-    
-    const {productName} = req.body
-    const query = "select * from products where ProductID = ?";
-    try{
-        var con = await pool.getConnection();
-        if(con!=null){
-            var [result] = await con.execute(query,[productName])
-            console.log(result)
-            con.release();
-            res.json(result)
-        }
-    }catch(e){
-        console.log(e)
+// product info to sell
+
+
+app.post('/product-info-to-sell', async (req, res) => {
+    const { prodID } = req.body;
+
+    if (!prodID) {
+        return res.status(400).json({ error: 'Product ID is required' });
     }
-})
+
+    const query = `
+        WITH StockSummary AS (
+            SELECT 
+                ProductID,
+                COALESCE(SUM(QuantityAdded), 0) AS TotalStockAdded
+            FROM 
+                Stock
+            GROUP BY 
+                ProductID
+        ),
+        SalesSummary AS (
+            SELECT 
+                ProductID,
+                COALESCE(SUM(QuantitySold), 0) AS TotalQuantitySold
+            FROM 
+                Sales
+            GROUP BY 
+                ProductID
+        )
+        SELECT 
+            p.ProductID,
+            p.Name,
+            p.Category,
+            p.Price,
+            COALESCE(st.TotalStockAdded, 0) AS TotalStockAdded,
+            COALESCE(sal.TotalQuantitySold, 0) AS TotalQuantitySold,
+            COALESCE(st.TotalStockAdded, 0) - COALESCE(sal.TotalQuantitySold, 0) AS CurrentStock
+        FROM 
+            Products p
+        LEFT JOIN 
+            StockSummary st ON p.ProductID = st.ProductID
+        LEFT JOIN 
+            SalesSummary sal ON p.ProductID = sal.ProductID
+        WHERE 
+            p.ProductID = ?
+    `;
+
+    let con;
+    try {
+        con = await pool.getConnection();
+        const [results] = await con.execute(query, [prodID]);
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        const product = results[0];
+        console.log(`ProductID: ${prodID}, TotalStockAdded: ${product.TotalStockAdded}, TotalQuantitySold: ${product.TotalQuantitySold}, CurrentStock: ${product.CurrentStock}`);
+
+        res.json({
+            ProductID: product.ProductID,
+            Name: product.Name,
+            Category: product.Category,
+            Price: parseFloat(product.Price).toFixed(2),
+            CurrentStock: Math.max(product.CurrentStock, 0),
+            InStock: product.CurrentStock > 0
+        });
+    } catch (e) {
+        console.error('Error fetching product info:', e);
+        res.status(500).json({
+            error: 'Failed to fetch product info',
+            details: e.message
+        });
+    } finally {
+        if (con) con.release();
+    }
+});
 
 // selllllllllllll
-
 app.post('/sell-product', async (req, res) => {
-    console.log(req.body)
     const { allProdSaleInfo } = req.body;
-    
+
     try {
-        // Create database connection
         const con = await pool.getConnection();
-        
+
         try {
-            // Begin transaction
             await con.beginTransaction();
-            
-            // Process each product sale
+
             for (const sale of allProdSaleInfo) {
                 const { ProductName, Price, Amount, Total, SaleDate } = sale;
-                
-                // Get ProductID by ProductName
+
                 const [productResult] = await con.query(
                     'SELECT ProductID FROM Products WHERE Name = ?',
                     [ProductName]
                 );
-                
+
                 if (!productResult.length) {
                     throw new Error(`Product ${ProductName} not found`);
                 }
-                
+
                 const ProductID = productResult[0].ProductID;
-                
-                // Insert into Sales table
-                await con.query(
-                    `INSERT INTO Sales (ProductID, QuantitySold, SaleDate, TotalAmount)
-                    VALUES (?, ?, ?, ?)`,
-                    [ProductID, Amount, SaleDate, Total]
+
+                let remainingAmount = Amount;
+
+                // Fetch stocks per supplier for this product, order by available Quantity
+                const [stockRows] = await con.query(
+                    `SELECT StockID, SupplierID, QuantityAdded 
+                     FROM Stock 
+                     WHERE ProductID = ? AND QuantityAdded > 0 
+                     ORDER BY QuantityAdded DESC`,
+                    [ProductID]
                 );
-                
-                // Update Stock quantity
-                await con.query(
-                    `UPDATE Stock 
-                    SET QuantityAdded = QuantityAdded - ? 
-                    WHERE ProductID = ?`,
-                    [Amount, ProductID]
-                );
+
+                let totalAvailable = stockRows.reduce((sum, s) => sum + s.QuantityAdded, 0);
+                if (totalAvailable < remainingAmount) {
+                    throw new Error(`Insufficient stock for ${ProductName}`);
+                }
+
+                for (const stock of stockRows) {
+                    if (remainingAmount === 0) break;
+
+                    const usedQuantity = Math.min(stock.QuantityAdded, remainingAmount);
+
+                    // Insert sale record for this supplier
+                    await con.query(
+                        `INSERT INTO Sales (ProductID, QuantitySold, SaleDate, TotalAmount)
+                         VALUES (?, ?, ?, ?)`,
+                        [ProductID, usedQuantity, SaleDate, (usedQuantity * Price).toFixed(2)]
+                    );
+
+                    // Update stock
+                    await con.query(
+                        `UPDATE Stock 
+                         SET QuantityAdded = QuantityAdded - ? 
+                         WHERE StockID = ?`,
+                        [usedQuantity, stock.StockID]
+                    );
+
+                    remainingAmount -= usedQuantity;
+                }
             }
-            
-            // Commit transaction
+
             await con.commit();
-            res.status(200).json({ message: 'Sales recorded successfully' });
-            
+            res.status(200).json({ message: 'Sales recorded and stocks updated successfully' });
+
         } catch (error) {
-            // Rollback transaction on error
             await con.rollback();
             throw error;
         } finally {
             con.release();
         }
-        
+
     } catch (error) {
         console.error('Error processing sale:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             error: 'Failed to process sale',
-            details: error.message 
+            details: error.message
         });
     }
 });
+
 
 
 

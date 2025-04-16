@@ -58,9 +58,11 @@ const showsSellPane = () => {
                         <div class="product-preview">
                                 <h7>Product Preview</h7>
                                 <label for="prod-name-show">Product Name</label>
-                                <p class="prod-name-show" name="prod-name-show">Spag</p>
+                                <p class="prod-name-show" name="prod-name-show">__</p>
                                 <label for="prod-price-show">Price</label>
-                                <p class="prod-price-show" name="prod-price-show">90PHP</p>
+                                <p class="prod-price-show" name="prod-price-show">__</p>
+                                <label for="prod-quantity-left-show">Quantity Left</label>
+                                <p class="prod-quantity-left-show" name="prod-quantity-left-show">__</p>
                                 <div class="total-show">
                                     <p>Total is:</p>
                                     <p class="total-value-single-prod">11</p>
@@ -120,18 +122,19 @@ const removeRow = (btn) => {
 
 const previewProd = async() =>{
   var prodPreviewPane = document.querySelector('.product-preview')
-  console.log(prodPreviewPane)
   var prodID = parseInt(document.querySelector('.product-id').value)
   var product = await productInfoToSell(prodID)
-    
+    console.log(product)
   prodPreviewPane.innerHTML = `
     <label for="prod-name-show">Product Name</label>
-    <p class="prod-name-show" name="prod-name-show">${product[0].Name}</p>
+    <p class="prod-name-show" name="prod-name-show">${product.Name}</p>
     <label for="prod-price-show">Price</label>
-    <p class="prod-price-show" name="prod-price-show">${product[0].Price}</p>
-     <div class="total-show">
+    <p class="prod-price-show" name="prod-price-show">${product.Price}</p>
+    <label for="prod-quantity-left-show">Quantity Left</label>
+    <p class="prod-quantity-left-show" name="prod-quantity-left-show">${product.CurrentStock}</p>                            
+    <div class="total-show">
                                     <p>Total is:</p>
-                                    <p class="total-value-single-prod">11</p>
+                                    <p class="total-value-single-prod">0</p>
                                 </div>
 `
 }
