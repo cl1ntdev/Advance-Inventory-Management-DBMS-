@@ -1,4 +1,3 @@
-
 // Add, View, Update, Delete
 
 const fillPaneUser = async() =>{
@@ -25,7 +24,6 @@ const fillPaneUser = async() =>{
                            <select name="" id="user-role-input">
                                 <option value="Admin">Admin</option>
                                 <option value="Salesperson">Salesperson</option>
-                                <option value="Inventory Clerk">Inventory Clerk</option>
                            </select>
                          </div>
                        <button onclick="addUserToDb()">Add</button>
@@ -109,6 +107,7 @@ const fillPaneUser = async() =>{
         }else if (currentCrud == "Delete" && currentSideBar == "Users"){
             var users = await getUsers();
             role_base_cont.innerHTML = `
+                <div class="delete-user-main">
                 <h3>Delete User</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
@@ -137,6 +136,7 @@ const fillPaneUser = async() =>{
                     <button onclick="deleteUser()">Delete</button>
                 </div>
                 </div>
+                </div>
             `;
     }
     }catch(e){
@@ -145,6 +145,10 @@ const fillPaneUser = async() =>{
     
 }
 
+
+const t = () =>{
+    
+}
 
 
 

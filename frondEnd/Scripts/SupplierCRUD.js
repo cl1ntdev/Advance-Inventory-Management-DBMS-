@@ -1,4 +1,3 @@
-
 // Add, View, Update, Delete
 
 const fillPaneSupplier = async() =>{
@@ -12,25 +11,27 @@ const fillPaneSupplier = async() =>{
         
         if(currentCrud == "Add" && currentSideBar == "Supplier"){
             role_base_cont.innerHTML = `
-            <h1>Add Supplier</h1>
-                    <div action="">
-                      
-                        <div class="product-add-details-suppliers">
-                            <div class="supplier-show-pane">
-                                <div class="supplier-show">
-                                   
-                                </div>
+            <div class="add-supplier-main">
+                <h1>Add Supplier</h1>
+                <div action="">
+                  
+                    <div class="product-add-details-suppliers">
+                        <div class="supplier-show-pane">
+                            <div class="supplier-show">
                                
                             </div>
-                            
-                            
-                            <span class="addsupplier" onclick="addSupplier('custom-sup-only')">+Add Custom Supplier </span>
+                           
+                        </div>
+                        
+                        
+                        <span class="addsupplier" onclick="addSupplier('custom-sup-only')">+Add Custom Supplier </span>
 
-                       </div>
-                       
-                       <button class="addsupplier onclick="addSupplierDb()">Add</button>
-                    </div>
-                    `
+                   </div>
+                   
+                   <button class="addsupplier" onclick="addSupplierDb()">Add</button>
+                </div>
+            </div>
+                `
                 
         }else if( currentCrud == "View" && currentSideBar == "Supplier"){
             var suppliers = await getSuppliers();
@@ -104,33 +105,35 @@ const fillPaneSupplier = async() =>{
         }else if (currentCrud == "Delete" && currentSideBar == "Supplier"){
             var suppliers = await getSuppliers();
             role_base_cont.innerHTML = `
-                <h3>Delete Supplier</h3>
-                <div class="product-lists">
-                    <table class="product-show-table">
-                        <thead>
-                            <tr>
-                                <th>Supplier ID</th>
-                                <th>Name</th>
-                                <th>Contact Info</th>
-                            </tr>
-                        </thead>
-                        <tbody class="product-table-body">
-                            ${suppliers.map(prod => (
-                                `<tr>
-                                    <td>${prod.SupplierID}</td>
-                                    <td>${prod.Name}</td>
-                                    <td>${prod.ContactInfo}</td>
-                                </tr>`
-                            )).join('')}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="update-inputs">
-                     <div class="update-inputs">
-                    <label for="prodname">Enter Supplier ID</label>
-                    <input type="text" name="prodname" class="supplier-id-delete" required>
-                    <button onclick="deleteSupplier()">Delete</button>
-                </div>
+                <div class="delete-supplier-main">
+                    <h3>Delete Supplier</h3>
+                    <div class="product-lists">
+                        <table class="product-show-table">
+                            <thead>
+                                <tr>
+                                    <th>Supplier ID</th>
+                                    <th>Name</th>
+                                    <th>Contact Info</th>
+                                </tr>
+                            </thead>
+                            <tbody class="product-table-body">
+                                ${suppliers.map(prod => (
+                                    `<tr>
+                                        <td>${prod.SupplierID}</td>
+                                        <td>${prod.Name}</td>
+                                        <td>${prod.ContactInfo}</td>
+                                    </tr>`
+                                )).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="update-inputs">
+                         <div class="update-inputs">
+                        <label for="prodname">Enter Supplier ID</label>
+                        <input type="text" name="prodname" class="supplier-id-delete" required>
+                        <button onclick="deleteSupplier()">Delete</button>
+                    </div>
+                    </div>
                 </div>
             `;
     }

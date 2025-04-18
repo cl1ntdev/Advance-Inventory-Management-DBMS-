@@ -16,7 +16,6 @@ const showLoginPanel = () => {
                  <select name="role" id="role" class="select-input">
                     <option value="Admin">Admin</option>
                     <option value="Salesperson">Salesperson</option>
-                    <option value="Inventory Clerk">Inventory Clerk</option>
                 </select>
                 <input class="submit" onclick="login()" type="submit" value="Log in" />
             </form>

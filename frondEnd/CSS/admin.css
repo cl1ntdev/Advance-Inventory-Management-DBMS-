@@ -356,7 +356,11 @@ SUPPLIER
     overflow-y: auto;
 }
 
-.user-add-main,.view-supplier-main,.update-user-main,.user-view-main{
+.user-add-main,.view-supplier-main,
+.update-user-main,.user-view-main,
+.add-supplier-main,.product-supplier-main,
+.delete-supplier-main,.delete-user-main,
+.view-product-main,.delete-prod-main{
     align-items: center;
     width: 100%;
     height: 100%;

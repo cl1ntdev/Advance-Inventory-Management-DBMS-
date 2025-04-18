@@ -18,4 +18,4 @@ Products
 |         3 | Piattos        | Snack Chips | 15.00 |
 |         4 | Roller Coaster | Snack Chips | 13.00 |
 |         5 | Vcut           | Snack Chips | 12.00 |
-+-----------+----------------+-------------+-------+
++-----------+----------------+-------------+-------+DESCRIBE products;DESCRIBE rawdata;DESCRIBE roles;DESCRIBE sales;DESCRIBE stock;DESCRIBE supplierproducts;DESCRIBE suppliers;DESCRIBE users;

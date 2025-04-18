@@ -73,6 +73,7 @@ const fillPane = async() =>{
             var products = await getProducts();
             console.log(products)
             role_base_cont.innerHTML = `
+                <div class="view-product-main">
                 <h3>View Products</h3>
                 <table class="product-show-table">
                         <th>
@@ -87,6 +88,7 @@ const fillPane = async() =>{
                            
                         </tbody>
                     </table>
+                    </div>
             `
             var tableBody = document.querySelector('.product-table-body')
             products.forEach(product=>{
@@ -144,6 +146,7 @@ const fillPane = async() =>{
         }else if (currentCrud == "Delete" && currentSideBar == "Product"){
             var products = await getProducts();
             role_base_cont.innerHTML = `
+            <div class="delete-prod-main">
                 <h3>Delete Product</h3>
                 <div class="product-lists">
                     <table class="product-show-table">
@@ -171,6 +174,7 @@ const fillPane = async() =>{
                     <label for="prodname">Enter Product ID</label>
                     <input type="text" name="prodname" class="product-id-delete" required>
                     <button onclick="deleteProduct()">Delete</button>
+                </div>
                 </div>
             `;
     }
