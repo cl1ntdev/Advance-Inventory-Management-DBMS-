@@ -183,18 +183,39 @@ app.post('/insert-product', async (req, res) => {
 
 //delete product
 app.post('/delete-product', async(req,res)=>{
-    console.log(req.body)
-    const {id} = req.body;
-    const query2 = "delete from products where ProductID = ?"
-    const query1 = "delete from supplierproducts where ProductID = ?"
-    try{
-        const con = await pool.getConnection();
-        await con.execute(query1,[id])
-        await con.execute(query2,[id])
-        con.release()
-        console.log('deleted successfully')
-    }catch(e){
-        console.log(e)
+    const id = parseInt(req.body.id);
+    if (isNaN(id)) return res.status(400).send('Invalid Product ID');
+  
+    const deleteSales = "DELETE FROM sales WHERE ProductID = ?";
+    const deleteStock = "DELETE FROM stock WHERE ProductID = ?";
+    const deleteSupplierProducts = "DELETE FROM supplierproducts WHERE ProductID = ?";
+    const deleteProduct = "DELETE FROM products WHERE ProductID = ?";
+  
+    try {
+      const con = await pool.getConnection();
+      await con.beginTransaction();
+  
+      // Delete dependent records first
+      await con.execute(deleteSales, [id]);
+      await con.execute(deleteStock, [id]);
+      await con.execute(deleteSupplierProducts, [id]);
+  
+      // Delete product last
+      const [result] = await con.execute(deleteProduct, [id]);
+  
+      await con.commit();
+      con.release();
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).send('Product not found or already deleted');
+      }
+  
+      console.log('Product and related data deleted successfully');
+      res.send('Product and related data deleted successfully');
+    } catch (error) {
+      console.error('Deletion failed:', error);
+      if (con) await con.rollback();
+      res.status(500).send('Server error during deletion');
     }
 })
 
@@ -817,12 +838,12 @@ app.post('/sell-product', async (req, res) => {
                     );
 
                     // Update stock
-                    await con.query(
-                        `UPDATE Stock 
-                         SET QuantityAdded = QuantityAdded - ? 
-                         WHERE StockID = ?`,
-                        [usedQuantity, stock.StockID]
-                    );
+                    // await con.query(
+                    //     `UPDATE Stock 
+                    //      SET QuantityAdded = QuantityAdded - ? 
+                    //      WHERE StockID = ?`,
+                    //     [usedQuantity, stock.StockID]
+                    // );
 
                     remainingAmount -= usedQuantity;
                 }

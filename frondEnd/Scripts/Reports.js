@@ -10,6 +10,7 @@ async function fillPaneReports() {
         const { products = [], totalRevenue = 0, totalUnitsSold = 0, lowStockCount = 0 } = salesReport;
 
         // Use backend's lowStock flag for low stock products
+        console.log(products)
         const lowStockProducts = products.filter(prod => prod.LowStock);
         const sortedProductsDescending = products.sort((prodA, prodB) => parseFloat(prodB.ProductRevenue) - parseFloat(prodA.ProductRevenue));
         console.log(sortedProductsDescending);
@@ -21,7 +22,7 @@ async function fillPaneReports() {
                 <div class="summary-section">
                     <div class="summary-card">
                         <h4>Total Revenue</h4>
-                        <p>$${parseFloat(totalRevenue).toFixed(2)}</p>
+                        <p>₱${parseFloat(totalRevenue).toFixed(2)}</p>
                     </div>
                     <div class="summary-card">
                         <h4>Total Units Sold</h4>
@@ -59,10 +60,10 @@ async function fillPaneReports() {
                                         <td>${prod.ProductID || '-'}</td>
                                         <td>${prod.ProductName || '-'}</td>
                                         <td>${prod.SupplierNames || 'No Supplier'}</td>
-                                        <td>$${parseFloat(prod.Price || 0).toFixed(2)}</td>
+                                        <td>₱${parseFloat(prod.Price || 0).toFixed(2)}</td>
                                         <td>${prod.CurrentStock || 0}</td>
                                         <td>${prod.TotalQuantitySold || 0}</td>
-                                        <td>$${parseFloat(prod.ProductRevenue || 0).toFixed(2)}</td>
+                                        <td>₱${parseFloat(prod.ProductRevenue || 0).toFixed(2)}</td>
                                     </tr>
                                 `).join('') : `
                                     <tr>

@@ -35,15 +35,15 @@ const fillPane = async() =>{
                         <h1>Add product</h1>
                        <div class="product-add-details">
                            <label for="add-product-name">Product Name</label>
-                           <input type="text" name="add-product-name" placeholder="Chips"  id="product-name">
+                           <input type="text" name="add-product-name" placeholder="Doritos"  id="product-name">
                        </div>
                        <div class="product-add-details">
                            <label for="add-product-category">Product Category</label>
-                           <input type="text" name="add-product-category" placeholder="Food" id="product-category">
+                           <input type="text" name="add-product-category" placeholder="Consumables" id="product-category">
                        </div>
                        <div class="product-add-details">
                            <label for="add-product-price">Product Price</label>
-                           <input type="text" name="add-product-price" placeholder="20" id="product-price">
+                           <input type="text" name="add-product-price" placeholder="25" id="product-price">
                        </div>
                         <div class="product-add-details-suppliers">
                            <h3>Suppliers</h3>
@@ -58,8 +58,8 @@ const fillPane = async() =>{
                             </div>
                             
                             <div class="button-add-options">
-                                <span class="addsupplier" onclick="addSupplier('sel')">+Add More Supplier </span>
-                                <span class="addsupplier" onclick="addSupplier('custom')">+Add Custom Supplier </span>
+                                <span class="addsupplier" onclick="addSupplier('sel')"> Add Existing Supplier </span>
+                                <span class="addsupplier" onclick="addSupplier('custom')"> Add New Supplier </span>
                             </div>
                             
 
