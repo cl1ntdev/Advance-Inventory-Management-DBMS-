@@ -42,6 +42,7 @@ const fillPaneSupplier = async() =>{
                 <table class="product-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Supplier ID</th>
                                 <th>Name</th>
                                 <th>ContactInfo</th>
@@ -54,9 +55,10 @@ const fillPaneSupplier = async() =>{
                     </div>
             `
             var tableBody = document.querySelector('.product-table-body')
-            suppliers.forEach(supplier=>{
+            suppliers.forEach((supplier,i)=>{
                 var content = `
                             <tr>
+                                <td>${++i}</td>
                                 <td>${supplier.SupplierID}</td>
                                 <td>${supplier.Name}</td>
                                 <td>${supplier.ContactInfo}</td>
@@ -73,14 +75,16 @@ const fillPaneSupplier = async() =>{
                     <table class="product-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Supplier ID</th>
                                 <th>Name</th>
                                 <th>Contact Info</th>
                             </tr>
                         </thead>
                         <tbody class="product-table-body">
-                            ${suppliers.map(prod => (
+                            ${suppliers.map((prod,i) => (
                                 `<tr>
+                                    <td>${++i}</td>
                                     <td>${prod.SupplierID}</td>
                                     <td>${prod.Name}</td>
                                     <td>${prod.ContactInfo}</td>
@@ -111,14 +115,16 @@ const fillPaneSupplier = async() =>{
                         <table class="product-show-table">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Supplier ID</th>
                                     <th>Name</th>
                                     <th>Contact Info</th>
                                 </tr>
                             </thead>
                             <tbody class="product-table-body">
-                                ${suppliers.map(prod => (
+                                ${suppliers.map((prod,i) => (
                                     `<tr>
+                                        <td>${++i}</td>
                                         <td>${prod.SupplierID}</td>
                                         <td>${prod.Name}</td>
                                         <td>${prod.ContactInfo}</td>

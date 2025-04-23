@@ -78,6 +78,7 @@ const fillPane = async() =>{
                 <table class="product-show-table">
                         <th>
                             <tr>
+                                <td>ID</td>
                                 <td>Product ID</td>
                                 <td>Name</td>
                                 <td>Category</td>
@@ -91,9 +92,10 @@ const fillPane = async() =>{
                     </div>
             `
             var tableBody = document.querySelector('.product-table-body')
-            products.forEach(product=>{
+            products.forEach((product,i)=>{
                 var content = `
                             <tr>
+                                <td>${++i}</td>
                                 <td>${product.ProductID}</td>
                                 <td>${product.Name}</td>
                                 <td>${product.Category}</td>
@@ -111,6 +113,7 @@ const fillPane = async() =>{
                     <table class="product-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Product ID</th>
                                 <th>Name</th>
                                 <th>Category</th>
@@ -118,8 +121,9 @@ const fillPane = async() =>{
                             </tr>
                         </thead>
                         <tbody class="product-table-body">
-                            ${products.map(prod => (
+                            ${products.map((prod,i) => (
                                 `<tr>
+                                    <td>${++i}</td>
                                     <td>${prod.ProductID}</td>
                                     <td>${prod.Name}</td>
                                     <td>${prod.Category}</td>
@@ -152,6 +156,7 @@ const fillPane = async() =>{
                     <table class="product-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Product ID</th>
                                 <th>Name</th>
                                 <th>Category</th>
@@ -159,8 +164,9 @@ const fillPane = async() =>{
                             </tr>
                         </thead>
                         <tbody class="product-table-body">
-                            ${products.map(prod => (
+                            ${products.map((prod,i) => (
                                 `<tr>
+                                    <td>${++i}</td>
                                     <td>${prod.ProductID}</td>
                                     <td>${prod.Name}</td>
                                     <td>${prod.Category}</td>

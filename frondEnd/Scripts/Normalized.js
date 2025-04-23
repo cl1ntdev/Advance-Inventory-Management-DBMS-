@@ -16,11 +16,18 @@ const AllNormalizedData = async () => {
         <h3>Products</h3>
         <table>
           <thead>
-            <tr><th>ProductID</th><th>Name</th><th>Category</th><th>Price</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>ProductID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            </tr>
           </thead>
           <tbody>
-            ${products.map(p => `
+            ${products.map((p,i) => `
               <tr>
+                <td>${++i}</td>
                 <td>${p.ProductID}</td>
                 <td>${p.Name}</td>
                 <td>${p.Category}</td>
@@ -35,11 +42,16 @@ const AllNormalizedData = async () => {
         <h3>Roles</h3>
         <table>
           <thead>
-            <tr><th>RoleID</th><th>RoleName</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>RoleID</th>
+            <th>RoleName</th>
+            </tr>
           </thead>
           <tbody>
-            ${roles.map(r => `
+            ${roles.map((r,i) => `
               <tr>
+                <td>${++i}</td>
                 <td>${r.RoleID}</td>
                 <td>${r.RoleName}</td>
               </tr>
@@ -52,11 +64,19 @@ const AllNormalizedData = async () => {
         <h3>Sales</h3>
         <table>
           <thead>
-            <tr><th>SaleID</th><th>ProductID</th><th>QuantitySold</th><th>SaleDate</th><th>TotalAmount</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>SaleID</th>
+            <th>ProductID</th>
+            <th>QuantitySold</th>
+            <th>SaleDate</th>
+            <th>TotalAmount</th>
+            </tr>
           </thead>
           <tbody>
-            ${sales.map(s => `
+            ${sales.map((s,i) => `
               <tr>
+                <td>${++i}</td>
                 <td>${s.SaleID}</td>
                 <td>${s.ProductID}</td>
                 <td>${s.QuantitySold}</td>
@@ -72,11 +92,19 @@ const AllNormalizedData = async () => {
         <h3>Stocks</h3>
         <table>
           <thead>
-            <tr><th>StockID</th><th>ProductID</th><th>SupplierID</th><th>QuantityAdded</th><th>DateAdded</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>StockID</th>
+            <th>ProductID</th>
+            <th>SupplierID</th>
+            <th>QuantityAdded</th>
+            <th>DateAdded</th>
+            </tr>
           </thead>
           <tbody>
-            ${stocks.map(s => `
+            ${stocks.map((s,i) => `
               <tr>
+                <td>${++i}</td>
                 <td>${s.StockID}</td>
                 <td>${s.ProductID}</td>
                 <td>${s.SupplierID}</td>
@@ -92,7 +120,11 @@ const AllNormalizedData = async () => {
         <h3>SupplierProducts</h3>
         <table>
           <thead>
-            <tr><th>ID</th><th>SupplierID</th><th>ProductID</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>SupplierID</th>
+            <th>ProductID</th>
+            </tr>
           </thead>
           <tbody>
             ${supplierProducts.map(sp => `
@@ -110,11 +142,17 @@ const AllNormalizedData = async () => {
         <h3>Suppliers</h3>
         <table>
           <thead>
-            <tr><th>SupplierID</th><th>Name</th><th>ContactInfo</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>SupplierID</th>
+            <th>Name</th>
+            <th>ContactInfo</th>
+            </tr>
           </thead>
           <tbody>
-            ${suppliers.map(s => `
+            ${suppliers.map((s,i) => `
               <tr>
+                <td>${++i}</td>
                 <td>${s.SupplierID}</td>
                 <td>${s.Name}</td>
                 <td>${s.ContactInfo}</td>
@@ -128,11 +166,18 @@ const AllNormalizedData = async () => {
         <h3>Users</h3>
         <table>
           <thead>
-            <tr><th>UserID</th><th>Username</th><th>Password</th><th>RoleID</th></tr>
+            <tr>
+            <th>ID</th>
+            <th>UserID</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>RoleID</th>
+            </tr>
           </thead>
           <tbody>
-            ${users.map(u => `
+            ${users.map((u,i) => `
               <tr>
+                <td>${++i}</td>
                 <td>${u.UserID}</td>
                 <td>${u.Username}</td>
                 <td>${u.Password}</td>

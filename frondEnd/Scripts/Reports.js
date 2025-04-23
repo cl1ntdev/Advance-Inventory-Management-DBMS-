@@ -2,14 +2,12 @@ async function fillPaneReports() {
     try {
         const salesReport = await getSalesReport();
         console.log(salesReport)
-        // Validate salesReport
         if (!salesReport || typeof salesReport !== 'object') {
             throw new Error('Invalid sales report data');
         }
 
         const { products = [], totalRevenue = 0, totalUnitsSold = 0, lowStockCount = 0 } = salesReport;
 
-        // Use backend's lowStock flag for low stock products
         console.log(products)
         const lowStockProducts = products.filter(prod => prod.LowStock);
         const sortedProductsDescending = products.sort((prodA, prodB) => parseFloat(prodB.ProductRevenue) - parseFloat(prodA.ProductRevenue));

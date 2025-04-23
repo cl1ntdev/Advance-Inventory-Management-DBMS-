@@ -39,6 +39,7 @@ const fillPaneUser = async() =>{
                 <table class="user-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>User ID</th>
                                 <th>Username</th>
                                 <th>Role ID</th>
@@ -51,9 +52,10 @@ const fillPaneUser = async() =>{
                     </div>
             `
             var tableBody = document.querySelector('.user-table-body')
-            users.forEach(user=>{
+            users.forEach((user,i)=>{
                 var content = `
                             <tr>
+                                <td>${++i}</td>
                                 <td>${user.UserID}</td>
                                 <td>${user.Username}</td>
                                 <td>${user.RoleID}</td>
@@ -72,14 +74,16 @@ const fillPaneUser = async() =>{
                     <table class="product-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>User ID</th>
                                 <th>Username</th>
                                 <th>Role ID</th>
                             </tr>
                         </thead>
                         <tbody class="product-table-body">
-                            ${users.map(user => (
+                            ${users.map((user,i) => (
                                 `  <tr>
+                                <td>${++i}</td>
                                 <td>${user.UserID}</td>
                                 <td>${user.Username}</td>
                                 <td>${user.RoleID}</td>
@@ -113,14 +117,16 @@ const fillPaneUser = async() =>{
                     <table class="product-show-table">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>User ID</th>
                                 <th>Username</th>
                                 <th>Role ID</th>
                             </tr>
                         </thead>
                         <tbody class="product-table-body">
-                            ${users.map(user => (
+                            ${users.map((user,i) => (
                                 `  <tr>
+                                <td>${++i}</td>
                                 <td>${user.UserID}</td>
                                 <td>${user.Username}</td>
                                 <td>${user.RoleID}</td>

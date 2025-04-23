@@ -45,15 +45,17 @@
     max-height: 400px;
     overflow-y: auto;
     overflow-x: auto;
+    /* width: 120%; */
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .product-show-table, .stock-table {
+
     width: 100%;
     border-collapse: collapse;
-    min-width: 800px;
+    min-width: 1000px;
 }
 
 .low-stock {
@@ -243,7 +245,6 @@ PRODUCTS
 }
 
 .product-lists {
-    max-width: 800px;
     margin: 2rem auto;
     padding: 0 1rem;
     font-family: 'Arial', sans-serif;

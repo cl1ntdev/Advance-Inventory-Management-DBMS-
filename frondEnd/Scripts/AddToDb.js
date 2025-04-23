@@ -4,6 +4,9 @@
 
 
 const addProduct = async () => {
+    var userLogin = userContext.Username
+    console.log(userLogin)
+
     const pName = document.querySelector('#product-name').value.trim();
     const pCat = document.querySelector('#product-category').value.trim();
     const pPrice = parseFloat(document.querySelector('#product-price').value);
@@ -58,7 +61,8 @@ const addProduct = async () => {
             pName,
             pCat,
             pPrice,
-            suppliers
+            suppliers,
+            userLogin
         })
     });
 

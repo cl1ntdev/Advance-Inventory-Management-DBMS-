@@ -110,10 +110,11 @@ app.post('/verify-account',async(req,res)=>{
 // add product
 
 app.post('/insert-product', async (req, res) => {
-    const { pName, pCat, pPrice, suppliers } = req.body;
+    const { pName, pCat, pPrice, suppliers, userLogin } = req.body;
     console.log("req body in insert prod", req.body);
 
-    const qProduct = 'INSERT INTO Products(Name, Category, Price) VALUES (?, ?, ?)';
+
+    const qProduct = 'INSERT INTO Products(Name, Category, Price, username) VALUES (?, ?, ?, ?)';
     const qSuppliers = 'INSERT INTO Suppliers(Name, ContactInfo) VALUES (?, ?)';
     const qStock = 'INSERT INTO Stock(ProductID, SupplierID, QuantityAdded, DateAdded) VALUES (?, ?, ?, ?)';
     const getProductIdQuery = 'SELECT ProductID FROM Products WHERE Name = ? ORDER BY ProductID DESC LIMIT 1';
@@ -123,10 +124,13 @@ app.post('/insert-product', async (req, res) => {
     const con = await pool.getConnection();
 
     try {
+        var users = await con.execute("select * from users where username = ?",[userLogin])
+        console.log(users)
+
         await con.beginTransaction();
 
         // 1. Insert product
-        const [productResult] = await con.execute(qProduct, [pName, pCat, pPrice]);
+        const [productResult] = await con.execute(qProduct, [pName, pCat, pPrice,users.UserID]);
 
         // 2. Get the inserted ProductID
         const [productRows] = await con.execute(getProductIdQuery, [pName]);

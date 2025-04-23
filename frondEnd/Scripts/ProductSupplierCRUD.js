@@ -10,6 +10,7 @@ const fillPaneProductSupplier = async() =>{
                         <table class="product-show-table">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Supplier ID</th>
                                     <th>Name</th>
                                     <th>Product ID </th>
@@ -17,8 +18,9 @@ const fillPaneProductSupplier = async() =>{
                                 </tr>
                             </thead>
                             <tbody class="product-table-body">
-                                ${supplierProd.map(prod => (
+                                ${supplierProd.map((prod,i) => (
                                     `<tr>
+                                        <td>${++i}</td>
                                         <td>${prod.SupplierID}</td>
                                         <td>${prod.SupplierName}</td>
                                         <td>${prod.ProductID}</td>
